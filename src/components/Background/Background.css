@@ -1,12 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-}
-
 .Particles {
   position: fixed;
   top: 0;
