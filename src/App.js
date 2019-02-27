@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import './App.css';
+import './animate.css';
 import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Particles from 'react-particles-js';
 import Clarifai from 'clarifai';
 
@@ -28,6 +30,11 @@ class App extends Component {
     super(props);
     this.state = {
       input: '',
+      imageUrl: '',
+      imageWidth: null,
+      imageHeight: null,
+      faceBoxes: [],
+      isAnalysisDone: true,
     }
   }
 
@@ -36,17 +43,48 @@ class App extends Component {
   };
 
   onButtonSubmit = (event) => {
-    app.models.predict('a403429f2ddf4b49b307e318f00e528b', this.state.input)
-        .then(this.logBoxes)
-        .catch(console.log);
-    this.setState({input: ''});
+    this.setState(
+        {
+          imageUrl: this.state.input,
+          imageWidth: null,
+          imageHeight: null,
+          faceBoxes: [],
+          isAnalysisDone: false,
+        }
+        );
   };
 
-  logBoxes = (response) => {
-    let regions = response.outputs[0].data.regions;
-    for (let region of regions) {
-      console.log(region.region_info.bounding_box)
+  handleImage = () => {
+    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrl)
+        .then(this.extractClarifaiData)
+        .catch(console.log);
+
+    let inputImage = document.querySelector('.input-image');
+    this.setState({
+      imageHeight: inputImage.height,
+      imageWidth: inputImage.width,
+    })
+  };
+
+  extractClarifaiData = (response) => {
+    let data = response.outputs[0].data;
+    let newFaceBoxes = [];
+
+    if ('regions' in data) {
+      for (let region of data.regions) {
+        newFaceBoxes.push(region.region_info.bounding_box)
+      }
+      console.log('Faces found:', newFaceBoxes);
+    } else {
+      console.log('No faces found!')
     }
+
+    this.setState(
+        {
+          faceBoxes: newFaceBoxes,
+          isAnalysisDone: true,
+        }
+    );
   };
 
   render() {
@@ -62,7 +100,14 @@ class App extends Component {
             onInputChange={this.onInputChange}
             onButtonSubmit={this.onButtonSubmit}
             inputValue={this.state.input} />
-        {/*<FaceRecognition />*/}
+        <FaceRecognition
+            imageUrl={this.state.imageUrl}
+            handleImage={this.handleImage}
+            faceBoxes={this.state.faceBoxes}
+            imageWidth={this.state.imageWidth}
+            imageHeight={this.state.imageHeight}
+            isAnalysisDone={this.state.isAnalysisDone}
+        />
       </div>
     );
   }
