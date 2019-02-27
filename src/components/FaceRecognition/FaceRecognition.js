@@ -3,7 +3,7 @@ import './FaceRecognition.css'
 import FaceBox from '../FaceBox/FaceBox'
 
 
-const FaceRecognition = ({imageUrl, handleImage, faceBoxes, imageWidth, imageHeight, isAnalysisDone}) => {
+const FaceRecognition = ({imageUrl, handleImage, isImageDisplayed, faceBoxes, imageWidth, imageHeight, isAnalysisDone}) => {
   let faceBoxComponents = faceBoxes.map(
       (coordinates, i) => (
           <FaceBox
@@ -18,8 +18,8 @@ const FaceRecognition = ({imageUrl, handleImage, faceBoxes, imageWidth, imageHei
   let foundAnnouncement = (
         <p className='found-announcement f3'>
           {
-            (imageUrl === '') ? ' ' :
-            (isAnalysisDone === false) ? 'Looking for faces...' :
+            (!isImageDisplayed) ? '\u00A0' :
+            (!isAnalysisDone) ? 'Looking for faces...' :
             (faceBoxes.length === 0) ? 'No faces found!' :
             (faceBoxes.length === 1) ? '1 face found!' :
             `${faceBoxes.length} faces found!`
@@ -28,7 +28,7 @@ const FaceRecognition = ({imageUrl, handleImage, faceBoxes, imageWidth, imageHei
   );
 
   return (
-      <div className='result-container center ma'>
+      <div className='result-container center'>
         {foundAnnouncement}
         <div className='input-image-container mt2 relative'>
           <img className='br3 input-image' src={imageUrl} alt="" onLoad={handleImage}/>

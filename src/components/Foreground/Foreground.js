@@ -17,6 +17,7 @@ class Foreground extends Component {
     this.state = {
       input: '',
       imageUrl: '',
+      isImageDisplayed: false,
       imageWidth: null,
       imageHeight: null,
       faceBoxes: [],
@@ -32,6 +33,7 @@ class Foreground extends Component {
     this.setState(
         {
           imageUrl: this.state.input,
+          isImageDisplayed: false,
           imageWidth: null,
           imageHeight: null,
           faceBoxes: [],
@@ -47,6 +49,7 @@ class Foreground extends Component {
 
     let inputImage = document.querySelector('.input-image');
     this.setState({
+      isImageDisplayed: true,
       imageHeight: inputImage.height,
       imageWidth: inputImage.width,
     })
@@ -86,6 +89,7 @@ class Foreground extends Component {
           <FaceRecognition
               imageUrl={this.state.imageUrl}
               handleImage={this.handleImage}
+              isImageDisplayed={this.state.isImageDisplayed}
               faceBoxes={this.state.faceBoxes}
               imageWidth={this.state.imageWidth}
               imageHeight={this.state.imageHeight}
