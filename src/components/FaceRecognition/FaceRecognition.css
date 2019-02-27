@@ -3,3 +3,10 @@ img {
   width: 500px;
   height: auto;
 }
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
