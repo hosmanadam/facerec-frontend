@@ -6,6 +6,8 @@ import Logo from '../Logo/Logo';
 import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
 import Rank from '../Rank/Rank';
 import FaceRecognition from '../FaceRecognition/FaceRecognition';
+import SignIn from '../SignIn/SignIn';
+import Register from '../Register/Register';
 import Clarifai from 'clarifai';
 
 
@@ -22,6 +24,8 @@ class Foreground extends Component {
       imageHeight: null,
       faceBoxes: [],
       isAnalysisDone: true,
+      route: 'signin',
+      isUserSignedIn: false,
     }
   }
 
@@ -76,25 +80,46 @@ class Foreground extends Component {
     );
   };
 
+  changeRoute = (newRoute) => {
+    this.setState({route: newRoute})
+  };
+
+  signUserIn = () => {
+    this.setState({isUserSignedIn: true})
+  };
+
+  signUserOut = () => {
+    this.setState({isUserSignedIn: false})
+  };
+
   render() {
+    console.log(this.state.isUserSignedIn);
     return (
         <div className="Foreground">
-          <Navigation />
-          <Logo />
-          <Rank />
-          <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
-              inputValue={this.state.input} />
-          <FaceRecognition
-              imageUrl={this.state.imageUrl}
-              handleImage={this.handleImage}
-              isImageDisplayed={this.state.isImageDisplayed}
-              faceBoxes={this.state.faceBoxes}
-              imageWidth={this.state.imageWidth}
-              imageHeight={this.state.imageHeight}
-              isAnalysisDone={this.state.isAnalysisDone}
-          />
+          <Navigation changeRoute={this.changeRoute} signUserOut={this.signUserOut} isUserSignedIn={this.state.isUserSignedIn}/>
+          {
+            (this.state.route === 'signin')
+            ? <SignIn changeRoute={this.changeRoute} signUserIn={this.signUserIn}/>
+            : (this.state.route === 'register')
+            ? <Register changeRoute={this.changeRoute} signUserIn={this.signUserIn}/>
+            : <div>
+              <Logo/>
+              <Rank/>
+              <ImageLinkForm
+                  onInputChange={this.onInputChange}
+                  onButtonSubmit={this.onButtonSubmit}
+                  inputValue={this.state.input}/>
+              <FaceRecognition
+                  imageUrl={this.state.imageUrl}
+                  handleImage={this.handleImage}
+                  isImageDisplayed={this.state.isImageDisplayed}
+                  faceBoxes={this.state.faceBoxes}
+                  imageWidth={this.state.imageWidth}
+                  imageHeight={this.state.imageHeight}
+                  isAnalysisDone={this.state.isAnalysisDone}
+              />
+            </div>
+          }
         </div>
     );
   }
