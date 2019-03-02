@@ -45,6 +45,17 @@ class Foreground extends Component {
           isAnalysisDone: false,
         }
     );
+    fetch(
+        'http://localhost:3000/image',
+        {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(this.state.user),
+        })
+        .then(response => response.json())
+        .then(body => this.setState({user: body}))
+    ;
   };
 
   handleImage = () => {
@@ -156,7 +167,7 @@ class Foreground extends Component {
             ? <Register registerUser={this.registerUser}/>
             : <div>
               <Logo/>
-              <Rank userName={this.state.user.name}/>
+              <Rank user={this.state.user}/>
               <ImageLinkForm
                   onInputChange={this.onInputChange}
                   onButtonSubmit={this.onButtonSubmit}
