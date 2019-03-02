@@ -109,6 +109,31 @@ class Foreground extends Component {
 
   };
 
+  registerUser = () => {
+    let name = document.querySelector('#name').value;
+    let password = document.querySelector('#password').value;
+    let email = document.querySelector('#email-address').value;
+    let form = {"name": name, "email": email, "password": password};
+
+    fetch(
+        'http://localhost:3000/register',
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(form),
+        })
+        .then(response => {
+          if (response.status === 200) {
+            console.log('Registered successfully');
+            this.changeRoute('signin');
+          } else {
+            console.log('Failed to register');
+          }
+        });
+
+  };
+
   signUserOut = () => {
     this.setState({isUserSignedIn: false});
     this.changeRoute('signin');
@@ -122,7 +147,7 @@ class Foreground extends Component {
             (this.state.route === 'signin')
             ? <SignIn signUserIn={this.signUserIn}/>
             : (this.state.route === 'register')
-            ? <Register signUserIn={this.signUserIn}/>
+            ? <Register registerUser={this.registerUser}/>
             : <div>
               <Logo/>
               <Rank/>
