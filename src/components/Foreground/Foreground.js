@@ -26,6 +26,15 @@ const initialState = {
   user: null,
 };
 
+const initialImageState = {
+  imageUrl: initialState.imageUrl,
+  isImageDisplayed: initialState.isImageDisplayed,
+  imageWidth: initialState.imageWidth,
+  imageHeight: initialState.imageHeight,
+  faceBoxes: initialState.faceBoxes,
+  isAnalysisDone: initialState.isAnalysisDone,
+};
+
 
 class Foreground extends Component {
   constructor(props) {
@@ -37,17 +46,13 @@ class Foreground extends Component {
     this.setState({input: event.target.value});
   };
 
+
   onButtonSubmit = (event) => {
     this.setState(
-        {
-          imageUrl: this.state.input,
-          isImageDisplayed: false,
-          imageWidth: null,
-          imageHeight: null,
-          faceBoxes: [],
-          isAnalysisDone: false,
-        }
-    );
+        initialImageState,
+        () => {this.setState({imageUrl: this.state.input})}
+        );
+
     fetch(
         'http://localhost:3000/image',
         {
@@ -72,6 +77,7 @@ class Foreground extends Component {
       isImageDisplayed: true,
       imageHeight: inputImage.height,
       imageWidth: inputImage.width,
+      isAnalysisDone: false,
     })
   };
 

@@ -18,7 +18,7 @@ const FaceRecognition = ({imageUrl, handleImage, isImageDisplayed, faceBoxes, im
   let foundAnnouncement = (
         <p className='found-announcement f3'>
           {
-            (!isImageDisplayed) ? '\u00A0'
+            (!isImageDisplayed) ? '\u00A0'  // Whitespace to keep things aligned
             : (!isAnalysisDone) ? 'Looking for faces...'
             : (faceBoxes.length === 0) ? 'No faces found!'
             : (faceBoxes.length === 1) ? '1 face found!'
@@ -27,11 +27,16 @@ const FaceRecognition = ({imageUrl, handleImage, isImageDisplayed, faceBoxes, im
         </p>
   );
 
+  let inputImageComponent = (
+      (imageUrl !== '') ? <img className='br3 input-image' src={imageUrl} alt="" onLoad={handleImage}/>
+      : null
+  );
+
   return (
       <div className='result-container center'>
         {foundAnnouncement}
         <div className='input-image-container mt2 relative'>
-          <img className='br3 input-image' src={imageUrl} alt="" onLoad={handleImage}/>
+          {inputImageComponent}
           {faceBoxComponents}
         </div>
       </div>
