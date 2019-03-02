@@ -26,6 +26,7 @@ class Foreground extends Component {
       isAnalysisDone: true,
       route: 'signin',
       isUserSignedIn: false,
+      user: null,
     }
   }
 
@@ -99,15 +100,20 @@ class Foreground extends Component {
         })
         .then(response => {
           if (response.status === 200) {
-            this.setState({isUserSignedIn: true});
-            this.changeRoute('home');
-            console.log('Logged in successfully');
+            return response.json();
           } else {
-            console.log('Failed to login');
+            throw new Error('Failed to login');
           }
-        });
-
+        })
+        .then((body) => {
+          this.setState({isUserSignedIn: true, user: body});
+          this.changeRoute('home');
+          console.log('Logged in successfully');
+          console.log(this.state.user);
+        })
+        .catch(console.log)
   };
+
 
   registerUser = () => {
     let name = document.querySelector('#name').value;
@@ -135,7 +141,7 @@ class Foreground extends Component {
   };
 
   signUserOut = () => {
-    this.setState({isUserSignedIn: false});
+    this.setState({isUserSignedIn: false, user: null});
     this.changeRoute('signin');
   };
 
