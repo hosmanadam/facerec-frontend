@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignIn = ({changeRoute, signUserIn}) => {
+const SignIn = ({signUserIn}) => {
   return (
       <article className="br3 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <div className="pa4 black-80">
@@ -24,12 +24,8 @@ const SignIn = ({changeRoute, signUserIn}) => {
                      value="Sign in"
                      onClick={() => {
                        signUserIn();
-                       changeRoute('home');
                      }}
               />
-            </div>
-            <div className="lh-copy mt3">
-              <p className="f6 link dim black db pointer" onClick={() => changeRoute('register')}>Register</p>
             </div>
           </div>
         </div>

@@ -85,11 +85,13 @@ class Foreground extends Component {
   };
 
   signUserIn = () => {
-    this.setState({isUserSignedIn: true})
+    this.setState({isUserSignedIn: true});
+    this.changeRoute('home');
   };
 
   signUserOut = () => {
-    this.setState({isUserSignedIn: false})
+    this.setState({isUserSignedIn: false});
+    this.changeRoute('signin');
   };
 
   render() {
@@ -99,9 +101,9 @@ class Foreground extends Component {
           <Navigation changeRoute={this.changeRoute} signUserOut={this.signUserOut} isUserSignedIn={this.state.isUserSignedIn}/>
           {
             (this.state.route === 'signin')
-            ? <SignIn changeRoute={this.changeRoute} signUserIn={this.signUserIn}/>
+            ? <SignIn signUserIn={this.signUserIn}/>
             : (this.state.route === 'register')
-            ? <Register changeRoute={this.changeRoute} signUserIn={this.signUserIn}/>
+            ? <Register signUserIn={this.signUserIn}/>
             : <div>
               <Logo/>
               <Rank/>

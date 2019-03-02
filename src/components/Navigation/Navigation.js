@@ -9,14 +9,14 @@ const Navigation = ({changeRoute, signUserOut, isUserSignedIn}) => {
           (isUserSignedIn === true)
 
           ? (<p className='f3 link dim black underline pa3 pointer'
-             onClick={() => { changeRoute('signin'); signUserOut(); }}>Sign Out</p>)
+             onClick={() => { signUserOut(); }}>Sign Out</p>)
 
           : (
              <>
                <p className='f3 link dim black underline pa3 pointer'
-               onClick={() => { changeRoute('signin'); signUserOut() }}>Sign In</p>
+               onClick={() => { changeRoute('signin') }}>Sign In</p>
                <p className='f3 link dim black underline pa3 pointer'
-               onClick={() => { changeRoute('register'); signUserOut() }}>Register</p>
+               onClick={() => { changeRoute('register') }}>Register</p>
              </>
             )
 
