@@ -156,7 +156,7 @@ class Foreground extends Component {
             ? <Register registerUser={this.registerUser}/>
             : <div>
               <Logo/>
-              <Rank/>
+              <Rank userName={this.state.user.name}/>
               <ImageLinkForm
                   onInputChange={this.onInputChange}
                   onButtonSubmit={this.onButtonSubmit}
