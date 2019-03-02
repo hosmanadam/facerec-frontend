@@ -13,21 +13,24 @@ import Clarifai from 'clarifai';
 
 const app = new Clarifai.App({apiKey: '0a6e9572400640b5ae84ff587db1436c'});
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  isImageDisplayed: false,
+  imageWidth: null,
+  imageHeight: null,
+  faceBoxes: [],
+  isAnalysisDone: true,
+  route: 'signin',
+  isUserSignedIn: false,
+  user: null,
+};
+
+
 class Foreground extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      input: '',
-      imageUrl: '',
-      isImageDisplayed: false,
-      imageWidth: null,
-      imageHeight: null,
-      faceBoxes: [],
-      isAnalysisDone: true,
-      route: 'signin',
-      isUserSignedIn: false,
-      user: null,
-    }
+    this.state = initialState;
   }
 
   onInputChange = (event) => {
@@ -54,8 +57,9 @@ class Foreground extends Component {
           body: JSON.stringify(this.state.user),
         })
         .then(response => response.json())
-        .then(body => this.setState({user: body}))
-    ;
+        .then(body => this.setState(
+            {user: Object.assign(this.state.user, {entries: body.entries})})
+        );
   };
 
   handleImage = () => {
@@ -152,7 +156,7 @@ class Foreground extends Component {
   };
 
   signUserOut = () => {
-    this.setState({isUserSignedIn: false, user: null});
+    this.setState(initialState);
     this.changeRoute('signin');
   };
 
