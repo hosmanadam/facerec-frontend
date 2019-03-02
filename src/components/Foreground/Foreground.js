@@ -85,8 +85,28 @@ class Foreground extends Component {
   };
 
   signUserIn = () => {
-    this.setState({isUserSignedIn: true});
-    this.changeRoute('home');
+    let password = document.querySelector('#password').value;
+    let email = document.querySelector('#email-address').value;
+    let form = {"email": email, "password": password};
+
+    fetch(
+        'http://localhost:3000/signin',
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(form),
+        })
+        .then(response => {
+          if (response.status === 200) {
+            this.setState({isUserSignedIn: true});
+            this.changeRoute('home');
+            console.log('Logged in successfully');
+          } else {
+            console.log('Failed to login');
+          }
+        });
+
   };
 
   signUserOut = () => {
@@ -95,7 +115,6 @@ class Foreground extends Component {
   };
 
   render() {
-    console.log(this.state.isUserSignedIn);
     return (
         <div className="Foreground">
           <Navigation changeRoute={this.changeRoute} signUserOut={this.signUserOut} isUserSignedIn={this.state.isUserSignedIn}/>
