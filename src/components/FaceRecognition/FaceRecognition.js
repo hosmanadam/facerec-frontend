@@ -18,11 +18,11 @@ const FaceRecognition = ({imageUrl, handleImage, isImageDisplayed, faceBoxes, im
   let foundAnnouncement = (
         <p className='found-announcement f3'>
           {
-            (!isImageDisplayed) ? '\u00A0' :
-            (!isAnalysisDone) ? 'Looking for faces...' :
-            (faceBoxes.length === 0) ? 'No faces found!' :
-            (faceBoxes.length === 1) ? '1 face found!' :
-            `${faceBoxes.length} faces found!`
+            (!isImageDisplayed) ? '\u00A0'
+            : (!isAnalysisDone) ? 'Looking for faces...'
+            : (faceBoxes.length === 0) ? 'No faces found!'
+            : (faceBoxes.length === 1) ? '1 face found!'
+            : `${faceBoxes.length} faces found!`
           }
         </p>
   );
