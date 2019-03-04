@@ -9,10 +9,7 @@ import FaceRecognition from '../FaceRecognition/FaceRecognition';
 import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import validateForm from '../../util';
-import Clarifai from 'clarifai';
 
-
-const app = new Clarifai.App({apiKey: '0a6e9572400640b5ae84ff587db1436c'});
 
 const initialState = {
   input: '',
@@ -60,23 +57,26 @@ class Foreground extends Component {
           method: 'PUT',
           mode: 'cors',
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(this.state.user),
+          body: JSON.stringify({
+            user: this.state.user,
+            imageUrl: this.state.input,
+          }),
         })
         .then(response => response.json())
-        .then(body => this.setState(
+        .then(body => {
+          this.setState(
             {user: Object.assign(
                 this.state.user,
-                {entries: body.entries}
+                {entries: body.user.entries}
                 )}
-        ))
+          );
+          return body;
+        })
+        .then(body => this.extractClarifaiData(body.clarifaiData))
         .catch(console.log);
   };
 
   handleImage = () => {
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrl)
-        .then(this.extractClarifaiData)
-        .catch(console.log);
-
     let inputImage = document.querySelector('.input-image');
     this.setState({
       isImageDisplayed: true,
