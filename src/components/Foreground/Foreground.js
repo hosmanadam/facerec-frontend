@@ -63,8 +63,12 @@ class Foreground extends Component {
         })
         .then(response => response.json())
         .then(body => this.setState(
-            {user: Object.assign(this.state.user, {entries: body.entries})})
-        );
+            {user: Object.assign(
+                this.state.user,
+                {entries: body.entries}
+                )}
+        ))
+        .catch(console.log);
   };
 
   handleImage = () => {
