@@ -35,6 +35,9 @@ const initialImageState = {
   isAnalysisDone: initialState.isAnalysisDone,
 };
 
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const nameRegex = /^\w+$/;
+const passwordRegex = /^\w+$/;
 
 class Foreground extends Component {
   constructor(props) {
@@ -142,27 +145,43 @@ class Foreground extends Component {
 
   registerUser = () => {
     let name = document.querySelector('#name').value;
-    let password = document.querySelector('#password').value;
     let email = document.querySelector('#email-address').value;
+    let password = document.querySelector('#password').value;
     let form = {"name": name, "email": email, "password": password};
 
-    fetch(
-        'http://localhost:3000/register',
-        {
-          method: 'POST',
-          mode: 'cors',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(form),
-        })
-        .then(response => {
-          if (response.status === 200) {
-            console.log('Registered successfully');
-            this.changeRoute('signin');
-          } else {
-            console.log('Failed to register');
-          }
-        });
+    let formValidation = {
+      isNameValid: name.match(nameRegex),
+      isEmailValid: email.match(emailRegex),
+      isPasswordValid: password.match(passwordRegex),
+    };
 
+    let isFormValid = Object.values(formValidation).every(x => x !== null);
+
+    if (isFormValid) {
+      fetch(
+          'http://localhost:3000/register',
+          {
+            method: 'POST',
+            mode: 'cors',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(form),
+          })
+          .then(response => {
+            if (response.status === 200) {
+              console.log('Registered successfully');
+              this.changeRoute('signin');
+            } else {
+              console.log('Failed to register');
+            }
+          });
+    } else {
+      let errorMessage = [
+            !formValidation.isNameValid ? 'Invalid name' : null,
+            !formValidation.isEmailValid ? 'Invalid email' : null,
+            !formValidation.isPasswordValid ? 'Invalid password' : null,
+          ].filter(Boolean).join('\n');
+      console.log(errorMessage)
+    }
   };
 
   signUserOut = () => {
