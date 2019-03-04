@@ -8,6 +8,7 @@ import Rank from '../Rank/Rank';
 import FaceRecognition from '../FaceRecognition/FaceRecognition';
 import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
+import validateForm from '../../util';
 import Clarifai from 'clarifai';
 
 
@@ -35,9 +36,6 @@ const initialImageState = {
   isAnalysisDone: initialState.isAnalysisDone,
 };
 
-const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const nameRegex = /^\w+$/;
-const passwordRegex = /^\w+$/;
 
 class Foreground extends Component {
   constructor(props) {
@@ -149,13 +147,7 @@ class Foreground extends Component {
     let password = document.querySelector('#password').value;
     let form = {"name": name, "email": email, "password": password};
 
-    let formValidation = {
-      isNameValid: name.match(nameRegex),
-      isEmailValid: email.match(emailRegex),
-      isPasswordValid: password.match(passwordRegex),
-    };
-
-    let isFormValid = Object.values(formValidation).every(x => x !== null);
+    let {isFormValid, formValidationError} = validateForm(form);
 
     if (isFormValid) {
       fetch(
@@ -175,12 +167,7 @@ class Foreground extends Component {
             }
           });
     } else {
-      let errorMessage = [
-            !formValidation.isNameValid ? 'Invalid name' : null,
-            !formValidation.isEmailValid ? 'Invalid email' : null,
-            !formValidation.isPasswordValid ? 'Invalid password' : null,
-          ].filter(Boolean).join('\n');
-      console.log(errorMessage)
+      console.log(formValidationError.message)
     }
   };
 
