@@ -116,28 +116,34 @@ class Foreground extends Component {
     let email = document.querySelector('#email-address').value;
     let form = {"email": email, "password": password};
 
-    fetch(
-        'http://localhost:3000/signin',
-        {
-          method: 'POST',
-          mode: 'cors',
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(form),
-        })
-        .then(response => {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            throw new Error('Failed to login');
-          }
-        })
-        .then((body) => {
-          this.setState({isUserSignedIn: true, user: body});
-          this.changeRoute('home');
-          console.log('Logged in successfully');
-          console.log(this.state.user);
-        })
-        .catch(console.log)
+    let {isFormValid, formValidationError} = validateForm(form);
+
+    if (isFormValid) {
+      fetch(
+          'http://localhost:3000/signin',
+          {
+            method: 'POST',
+            mode: 'cors',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(form),
+          })
+          .then(response => {
+            if (response.status === 200) {
+              return response.json();
+            } else {
+              throw new Error('Failed to login');
+            }
+          })
+          .then((body) => {
+            this.setState({isUserSignedIn: true, user: body});
+            this.changeRoute('home');
+            console.log('Logged in successfully');
+            console.log(this.state.user);
+          })
+          .catch(console.log)
+    } else {
+      console.log(formValidationError.message)
+    }
   };
 
 
