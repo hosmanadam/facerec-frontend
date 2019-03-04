@@ -24,6 +24,7 @@ const initialState = {
   user: null,
 };
 
+
 const initialImageState = {
   imageUrl: initialState.imageUrl,
   isImageDisplayed: initialState.isImageDisplayed,
@@ -52,7 +53,7 @@ class Foreground extends Component {
         );
 
     fetch(
-        'http://localhost:3000/image',
+        `${process.env.REACT_APP_BACKEND_URL}/image`,
         {
           method: 'PUT',
           mode: 'cors',
@@ -120,7 +121,7 @@ class Foreground extends Component {
 
     if (isFormValid) {
       fetch(
-          'http://localhost:3000/signin',
+          `${process.env.REACT_APP_BACKEND_URL}/signin`,
           {
             method: 'POST',
             mode: 'cors',
@@ -157,7 +158,7 @@ class Foreground extends Component {
 
     if (isFormValid) {
       fetch(
-          'http://localhost:3000/register',
+          `${process.env.REACT_APP_BACKEND_URL}/register`,
           {
             method: 'POST',
             mode: 'cors',
