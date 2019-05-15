@@ -1,3 +1,12 @@
+# facerec-frontend
+React.js front-end for face recognition webapp
+
+## What it does
+Struggling to find the faces on your images?  
+Create an account, and Facerec will help.
+Just paste the URL in and watch the magic happen.
+
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
